@@ -1,0 +1,1 @@
+[{"course_id": "C001", "course_name": "Introduction to Python", "teacher_id": "T001", "student_list": ["S001"]}, {"course_id": "C002", "course_name": "linear", "teacher_id": "T001", "student_list": ["S001"]}, {"course_id": "C004", "course_name": "Calculate", "teacher_id": "T001", "student_list": [""]}]
