@@ -136,7 +136,8 @@ class Teacher(Users):
                             for student in students:
                                 print(student,end=',')
                         return
-                print('can not find any course info')
+                print('This course may already been deleted,please refresh the program and login again')
+                #删除课程后再查看可能导致当前缓存中有这个课程但实际上并没有的残留情况
             else:
                 print('you type in an invalid serial number')
         except ValueError:
@@ -220,15 +221,16 @@ class Teacher(Users):
                 if course['course_id']==course_id:
                     print(f'the course {course["course_id"]} ,name: {course["course_name"]}, \
                     teacher: {course["teacher_id"]}')
-                    print('1.change the id of course')
+                    print('1.detele the course')
                     print('2.change the name of course')
                     manage=input('what you wanna do (1/2)')
+                    '''
                     if manage=='1':
                         new_id=input('enter new course ID: ')
                         # 你修改了课程id的话，老师教授的课程列表中的id也得改
-                        '''
-                        坏了，学生的enroll列表也得改，，要不把这个功能去了吧
-                        '''
+                        
+                        #坏了，学生的enroll列表也得改，，要不把这个功能去了吧
+                        
                         user_data=load_user()
                         for user in user_data:
                             if user['user_id']==course['teacher_id']:
@@ -238,7 +240,21 @@ class Teacher(Users):
                         for user in user_data:
                             if user['user_id']==course['teacher_id']:
                                 user["course_teach"].append(course['course_id'])
+                    '''
+                    if manage=='1':
+                        user_data=load_user()
+                        for user in user_data:
+                            if user['role'] == 'student':
+                                if course_id in user.get('enrolled_courses', []):
+                                    user['enrolled_courses'].remove(course_id)
+                            # 处理教师用户
+                            elif user['role'] == 'teacher':
+                                if course_id in user.get('course_teach', []):
+                                    user['course_teach'].remove(course_id)
 
+                        course_data.remove(course)
+                        save_course(course_data)
+                        save_user(user_data)
                     elif manage=='2':
                         new_name=input('enter new course name:')
                         course['course_name']=new_name
